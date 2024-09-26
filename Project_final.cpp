@@ -38,16 +38,19 @@ string today_date()
 }
 
 //если запрошенная дата совпадает с датой выдачи выводим всю строку в консоль
-void deadlines(string today, int HEIGHT, int WIDTH, string array_list[][8])
+void deadlines(int HEIGHT, int WIDTH, string array_list[][8], string(*pf)()) // указатель на функцию
 {
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(h, 15);
+    string today = pf();
+    SetConsoleTextAttribute(h, 6);
+
     cout << left;
     for (int i = 0, j = 0; j < WIDTH; j++)
     {
         if (j == 1)
         {
-            cout << setw(40) << array_list[0][j];
+            cout << setw(55) << array_list[0][j];
         }
         else if (j == 0)
         {
@@ -59,6 +62,7 @@ void deadlines(string today, int HEIGHT, int WIDTH, string array_list[][8])
         }
     }
     cout << "\n";
+
     for (int i = 1, j = 0; i < HEIGHT; i++)
     {
 
@@ -69,7 +73,7 @@ void deadlines(string today, int HEIGHT, int WIDTH, string array_list[][8])
             {
                 if (j == 1)
                 {
-                    cout << setw(40) << array_list[i][j];
+                    cout << setw(55) << array_list[i][j];
                 }
                 else if (j == 0)
                 {
@@ -256,7 +260,7 @@ int menu_program(int code, int HEIGHT, int WIDTH, string array_list[][8], double
     switch (code)
     {
     case 49:
-        deadlines(today_date(), HEIGHT, WIDTH, array_list);
+        deadlines(HEIGHT, WIDTH, array_list, today_date);
         cout << "\n";
         break;
     case 50:                                                //сумарные поступления
@@ -296,6 +300,10 @@ int menu_program(int code, int HEIGHT, int WIDTH, string array_list[][8], double
                 main();                         //используем рекурсию!
                 break;
             }
+            if (code == 27)
+            {
+                break;
+            }
             cout << "деньги которые заработал(a)" << worker << " = " << worker_earn(HEIGHT, array_list, worker) << " грн\n";
             cout << "\n";
         }
@@ -319,6 +327,10 @@ int menu_program(int code, int HEIGHT, int WIDTH, string array_list[][8], double
             case 27:
                 cout << "Выход\n";
                 main();                         //используем рекурсию!
+                break;
+            }
+            if (code == 27)
+            {
                 break;
             }
             cout << "деньги которые нужно заплатить " << worker << " = " << worker_payment(HEIGHT, array_list, worker) << " грн\n";
@@ -351,19 +363,14 @@ int main()
 {
     setlocale(0, "");
 
-
     double bonus = 0.2;
 
-    string worker = "сотрудник 1";
+    string worker;
 
     const int WIDTH = 8;
     const int HEIGHT = 17;
     const char* filename = "my_list.txt";
     string array_list[HEIGHT][WIDTH] = {};
-
-    //worker_payment(HEIGHT, array_list, worker);
-    //total_payment(HEIGHT, array_list);
-
 
     loadArrayFromFile(filename, HEIGHT, WIDTH, array_list);
 
@@ -378,6 +385,14 @@ int main()
     {
         add_bonus(HEIGHT, array_list, bonus);
         int code = _getch(); // функция приостанавливает работу программы, ждёт реакции пользователя
+
         menu_program(code, HEIGHT, WIDTH, array_list, bonus, worker);
+
+        if (code == 27)
+        {
+            break;
+        }
     }
+    //строка для изменений
 }
+
