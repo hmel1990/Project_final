@@ -343,7 +343,7 @@ int menu_program(int code, int HEIGHT, int WIDTH, string array_list[][8], double
         break;
     case 27:
         cout << "Программа завершена!\n";
-        return false;
+        return 27;
         break;
     default:
         cout << code << "\n";
@@ -361,6 +361,7 @@ void print_message()
 
 int main()
 {
+    MoveWindow(GetConsoleWindow(), 250, 150, 1400, 800, true);// установка стартовой позиции окна консоли (250, 150, 1400, 800 - пиксели) отступ слева, отступ справа, ширина окна, высота окна
     setlocale(0, "");
 
     double bonus = 0.2;
