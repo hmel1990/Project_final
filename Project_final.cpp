@@ -24,6 +24,7 @@ int total_payment(int HEIGHT, string** array);
 int total_profit(int HEIGHT, string** array, double bonus);
 void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string** array);
 int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker);
+int menu_program_message(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker);
 void print_message();
 
 
@@ -364,7 +365,7 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
                 break;
             case 27:
                 cout << "Выход\n";
-                main();                         //используем рекурсию!
+                menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker);                          //используем рекурсию!
                 break;
             }
             if (code == 27)
@@ -393,7 +394,7 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
                 break;
             case 27:
                 cout << "Выход\n";
-                main();                         //используем рекурсию!
+                menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker);                         //используем рекурсию!
                 break;
             }
             if (code == 27)
@@ -418,7 +419,24 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
     }
 }
 
-
+int menu_program_message(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker) {
+    while (true)
+    {
+        print_message();
+        HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute(h, 2);
+        while (true)
+        {
+            int code = _getch(); // функция приостанавливает работу программы, ждёт реакции пользователя
+            menu_program(code, HEIGHT, WIDTH, array, bonus, worker);
+            if (code == 27)
+            {
+                return false;
+                break;
+            }
+        }
+    }
+}
 
 //сообщение с подсказкой для меню выбора (цветное)
 void print_message()
@@ -438,6 +456,7 @@ int main()
     int WIDTH;
     int HEIGHT;
     string** array;
+    int code = 1;
 
 
     const char* filename = "my_list.txt";
@@ -451,25 +470,8 @@ int main()
         
     
     add_bonus(HEIGHT, array, bonus);
+    menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker);
 
-    print_message();
-
-    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(h, 2);
-
-    while (true)
-    {
-        add_bonus(HEIGHT, array, bonus);
-        int code = _getch(); // функция приостанавливает работу программы, ждёт реакции пользователя
-
-        menu_program(code, HEIGHT, WIDTH, array, bonus, worker);
-
-        if (code == 27)
-        {
-            break;
-        }
-    }
-    
   
 }
 
