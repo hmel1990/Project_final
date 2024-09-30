@@ -22,6 +22,10 @@ void add_bonus(int HEIGHT, string** array, double bonus);
 int worker_payment(int HEIGHT, string** array, string worker);
 int total_payment(int HEIGHT, string** array);
 int total_profit(int HEIGHT, string** array, double bonus);
+bool check_diapazone(const int value);
+void set_array_widh(int& WIDTH);
+void set_array_height(int& HEIGHT);
+void allocate_2D_array_memory(string**& array, const int WIDTH, const int HEIGHT);
 void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string** array);
 int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker);
 void print_message();
@@ -224,8 +228,6 @@ int total_profit(int HEIGHT, string** array, double bonus)
 
 //_____________________________________________________________________________________________
 //_____________________________________________________________________________________________
-
-
 // отдельная задача: проверка диапазона
 bool check_diapazone(const int value) 
 {
@@ -234,6 +236,7 @@ bool check_diapazone(const int value)
     return value >= min && value <= max;
 }
 
+// отдельная задача: ширина массива
 void set_array_widh(int& WIDTH)
 {
     int number = -1;
@@ -253,6 +256,7 @@ void set_array_widh(int& WIDTH)
     WIDTH = number;
 }
 
+// отдельная задача: высота массива
 void set_array_height(int& HEIGHT)
 {
     int number = -1;
@@ -272,8 +276,8 @@ void set_array_height(int& HEIGHT)
     HEIGHT = number;
 }
 
+//выделение памяти для массивов
 void allocate_2D_array_memory(string**& array, const int WIDTH, const int HEIGHT) {
-    // size = 100; // пометка параметра как const не позволит изменить значение параметра в теле функции
     array = new string* [HEIGHT]; // создание указателя на массив указателей
     for (int i = 0; i < HEIGHT; i++)
     {
@@ -281,8 +285,6 @@ void allocate_2D_array_memory(string**& array, const int WIDTH, const int HEIGHT
     }
    
 }
-
-
 //_____________________________________________________________________________________________
 //_____________________________________________________________________________________________
 
