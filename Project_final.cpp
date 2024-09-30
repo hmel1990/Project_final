@@ -38,11 +38,11 @@ string today_date()
 }
 
 //если запрошенная дата совпадает с датой выдачи выводим всю строку в консоль
-void deadlines(int HEIGHT, int WIDTH, string array_list[][8], string(*pf)()) // указатель на функцию
+void deadlines(int HEIGHT, int WIDTH, string** array) // указатель на функцию
 {
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(h, 15);
-    string today = pf();
+    string today = today_date();
     SetConsoleTextAttribute(h, 6);
 
     cout << left;
@@ -50,15 +50,15 @@ void deadlines(int HEIGHT, int WIDTH, string array_list[][8], string(*pf)()) // 
     {
         if (j == 1)
         {
-            cout << setw(55) << array_list[0][j];
+            cout << setw(55) << array[0][j];
         }
         else if (j == 0)
         {
-            cout << setw(5) << array_list[0][j];
+            cout << setw(5) << array[0][j];
         }
         else
         {
-            cout << setw(20) << array_list[0][j];
+            cout << setw(20) << array[0][j];
         }
     }
     cout << "\n";
@@ -66,22 +66,22 @@ void deadlines(int HEIGHT, int WIDTH, string array_list[][8], string(*pf)()) // 
     for (int i = 1, j = 0; i < HEIGHT; i++)
     {
 
-        if (array_list[i][DELIVERY] == today)
+        if (array[i][DELIVERY] == today)
         {
             cout << left;
             for (j = 0; j < WIDTH; j++)
             {
                 if (j == 1)
                 {
-                    cout << setw(55) << array_list[i][j];
+                    cout << setw(55) << array[i][j];
                 }
                 else if (j == 0)
                 {
-                    cout << setw(5) << array_list[i][j];
+                    cout << setw(5) << array[i][j];
                 }
                 else
                 {
-                    cout << setw(20) << array_list[i][j];
+                    cout << setw(20) << array[i][j];
 
                 }
             }
@@ -223,8 +223,73 @@ int total_profit(int HEIGHT, string array_list[][8], double bonus)
 
 
 //_____________________________________________________________________________________________
+//_____________________________________________________________________________________________
+
+
+// отдельная задача: проверка диапазона
+bool check_diapazone(const int value) 
+{
+    int min = 1;
+    int max = 200;
+    return value >= min && value <= max;
+}
+
+void set_array_widh(int& WIDTH)
+{
+    int number = -1;
+    do {
+        cout << "Введите ширину массива: ";
+        string attempt;
+        cin >> attempt;
+        try 
+        {
+            number = stoi(attempt); // stoi = string to int
+        }
+        catch (...) {
+            cout << "ERROR!\n";
+        }
+    } while (!check_diapazone(number));
+
+    WIDTH = number;
+}
+
+void set_array_height(int& HEIGHT)
+{
+    int number = -1;
+    do {
+        cout << "Введите длину массива: ";
+        string attempt;
+        cin >> attempt;
+        try
+        {
+            number = stoi(attempt); // stoi = string to int
+        }
+        catch (...) {
+            cout << "ERROR!\n";
+        }
+    } while (!check_diapazone(number));
+
+    HEIGHT = number;
+}
+
+void allocate_2D_array_memory(string**& array, const int WIDTH, const int HEIGHT) {
+    // size = 100; // пометка параметра как const не позволит изменить значение параметра в теле функции
+    array = new string* [HEIGHT]; // создание указателя на массив указателей
+    for (int i = 0; i < HEIGHT; i++)
+    {
+        array[i] = new string[WIDTH]; //выделение памяти для массивов
+    }
+   
+}
+
+
+//_____________________________________________________________________________________________
+//_____________________________________________________________________________________________
+
+
+//_____________________________________________________________________________________________
 //заполнение массива из текстового файла с разделителями в виде табуляции
-void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string array_list[][8]) {
+void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string **array) {
     FILE* file = fopen(filename, "r");  // открытие файла для чтения
     if (!file) {
         perror("Ошибка: не удалось открыть файл");
@@ -240,7 +305,7 @@ void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string array
         int col = 0;
 
         while (token && col < WIDTH) {
-            array_list[row][col] = string(token);  // преобразование в string и запись в массив
+            array[row][col] = string(token);  // преобразование в string и запись в массив
             token = strtok(NULL, "\t\n"); // переход на следующий кусок текста
             col++;
         }
@@ -252,6 +317,8 @@ void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string array
 }
 //_____________________________________________________________________________________________
 
+
+/*
 //меню выбора вариантов вывода информации
 int menu_program(int code, int HEIGHT, int WIDTH, string array_list[][8], double bonus, string worker)
 {
@@ -350,6 +417,8 @@ int menu_program(int code, int HEIGHT, int WIDTH, string array_list[][8], double
         break;
     }
 }
+*/
+
 
 //сообщение с подсказкой для меню выбора (цветное)
 void print_message()
@@ -365,16 +434,26 @@ int main()
     setlocale(0, "");
 
     double bonus = 0.2;
-
     string worker;
+    int WIDTH;
+    int HEIGHT;
+    string** array;
 
-    const int WIDTH = 8;
-    const int HEIGHT = 17;
+
     const char* filename = "my_list.txt";
-    string array_list[HEIGHT][WIDTH] = {};
+    //string array_list[HEIGHT][WIDTH] = {};
 
+    set_array_widh(WIDTH);
+    set_array_height(HEIGHT);
+    allocate_2D_array_memory(array, WIDTH, HEIGHT);
+
+    loadArrayFromFile(filename, HEIGHT, WIDTH, array);
+
+    deadlines(HEIGHT, WIDTH, array);
+
+    /*
     loadArrayFromFile(filename, HEIGHT, WIDTH, array_list);
-
+    
     add_bonus(HEIGHT, array_list, bonus);
 
     print_message();
@@ -394,5 +473,7 @@ int main()
             break;
         }
     }
+    */
+  
 }
 
