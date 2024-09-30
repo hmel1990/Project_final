@@ -472,6 +472,5 @@ int main()
     add_bonus(HEIGHT, array, bonus);
     menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker);
 
-  
-}
+  }
 
