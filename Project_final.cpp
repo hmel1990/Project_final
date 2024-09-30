@@ -457,17 +457,13 @@ int main()
     int HEIGHT;
     string** array;
     int code = 1;
-
-
     const char* filename = "my_list.txt";
-    //string array_list[HEIGHT][WIDTH] = {};
 
     set_array_widh(WIDTH);
     set_array_height(HEIGHT);
     allocate_2D_array_memory(array, WIDTH, HEIGHT);
 
-    loadArrayFromFile(filename, HEIGHT, WIDTH, array);
-        
+    loadArrayFromFile(filename, HEIGHT, WIDTH, array);     
     
     add_bonus(HEIGHT, array, bonus);
     menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker);
