@@ -13,17 +13,17 @@ enum KeyCodes { NUMBER = 0, ADRESS = 1, CUSTOMER = 2, EXECUTOR = 3, TOTAL = 4, I
 
 int main();
 string today_date();
-void deadlines(string today, int HEIGHT, int WIDTH, string array_list[][8]);
-int bonus_plus(int HEIGHT, string array_list[][8], double bonus);
-int income(int HEIGHT, string array_list[][8]);
-int bonus_plus_income(int HEIGHT, string array_list[][8], double bonus);
-int worker_earn(int HEIGHT, string array_list[][8], string worker);
-void add_bonus(int HEIGHT, string array_list[][8], double bonus);
-int worker_payment(int HEIGHT, string array_list[][8], string worker);
-int total_payment(int HEIGHT, string array_list[][8]);
-int total_profit(int HEIGHT, string array_list[][8], double bonus);
-void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string array_list[][8]);
-int menu_program(int code, int HEIGHT, int WIDTH, string array_list[][8], double bonus, string worker);
+void deadlines(string today, int HEIGHT, int WIDTH, string** array);
+int bonus_plus(int HEIGHT, string** array, double bonus);
+int income(int HEIGHT, string** array);
+int bonus_plus_income(int HEIGHT, string** array, double bonus);
+int worker_earn(int HEIGHT, string** array, string worker);
+void add_bonus(int HEIGHT, string** array, double bonus);
+int worker_payment(int HEIGHT, string** array, string worker);
+int total_payment(int HEIGHT, string** array);
+int total_profit(int HEIGHT, string** array, double bonus);
+void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string** array);
+int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker);
 void print_message();
 
 
@@ -38,11 +38,11 @@ string today_date()
 }
 
 //если запрошенная дата совпадает с датой выдачи выводим всю строку в консоль
-void deadlines(int HEIGHT, int WIDTH, string** array) // указатель на функцию
+void deadlines(int HEIGHT, int WIDTH, string** array, string(*pf)()) // указатель на функцию
 {
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(h, 15);
-    string today = today_date();
+    string today = pf();
     SetConsoleTextAttribute(h, 6);
 
     cout << left;
@@ -92,14 +92,14 @@ void deadlines(int HEIGHT, int WIDTH, string** array) // указатель на
 }
 
 // суммируем надбавки за выполнение работы в день ее поступления, надбавка равна 20% (все надбавки для сотрудников и подрядной фирмы)
-int bonus_plus(int HEIGHT, string array_list[][8], double bonus)
+int bonus_plus(int HEIGHT, string** array, double bonus)
 {
     int bonus_count = 0;
     for (int i = 0; i < HEIGHT; i++)
     {
-        if (array_list[i][INCOME] == array_list[i][DELIVERY])
+        if (array[i][INCOME] == array[i][DELIVERY])
         {
-            int x = stoi(array_list[i][TOTAL]) * bonus;
+            int x = stoi(array[i][TOTAL]) * bonus;
             bonus_count += x;
         }
     }
@@ -108,12 +108,12 @@ int bonus_plus(int HEIGHT, string array_list[][8], double bonus)
 }
 
 // сумарные поступления, без бонусов (все поступления для сотрудников и подрядной фирмы)
-int income(int HEIGHT, string array_list[][8])
+int income(int HEIGHT, string** array)
 {
     int sum = 0;
     for (int i = 1; i < HEIGHT; i++)
     {
-        int x = stoi(array_list[i][TOTAL]);
+        int x = stoi(array[i][TOTAL]);
         sum += x;
     }
     //cout << sum <<"\n";
@@ -121,44 +121,44 @@ int income(int HEIGHT, string array_list[][8])
 }
 
 //считаем сумарные поступления вместе с бонусами 
-int bonus_plus_income(int HEIGHT, string array_list[][8], double bonus)
+int bonus_plus_income(int HEIGHT, string** array, double bonus)
 {
     int total_incom = 0;
-    total_incom = income(HEIGHT, array_list) + bonus_plus(HEIGHT, array_list, bonus);
+    total_incom = income(HEIGHT, array) + bonus_plus(HEIGHT, array, bonus);
     //cout << total_incom << "\n";
     return total_incom;
 }
 
 //заполняем массив в случае наличия бонусами
-void add_bonus(int HEIGHT, string array_list[][8], double bonus)
+void add_bonus(int HEIGHT, string** array, double bonus)
 {
     for (int i = 1; i < HEIGHT; i++)
     {
-        if (array_list[i][INCOME] == array_list[i][DELIVERY])
+        if (array[i][INCOME] == array[i][DELIVERY])
         {
-            int x = stoi(array_list[i][4]) * bonus;
+            int x = stoi(array[i][4]) * bonus;
             string y = to_string(x);
-            array_list[i][BONUS] = y;
+            array[i][BONUS] = y;
         }
         else
         {
             int x = 0;
             string y = to_string(x);
-            array_list[i][BONUS] = y;
+            array[i][BONUS] = y;
         }
     }
     //cout << bonus_count;
 }
 
 //cчитаем заработаные деньги наемной фирмой или сотрудником (подсчет доходов отдельно по каждому сотруднику или подрядной фирме на выбор)
-int worker_earn(int HEIGHT, string array_list[][8], string worker)
+int worker_earn(int HEIGHT, string** array, string worker)
 {
     int payment = 0;
     for (int i = 0, j = 3; i < HEIGHT; i++)
     {
-        if (array_list[i][j] == worker)
+        if (array[i][j] == worker)
         {
-            int x = stoi(array_list[i][TOTAL]) + stoi(array_list[i][BONUS]);
+            int x = stoi(array[i][TOTAL]) + stoi(array[i][BONUS]);
             payment += x;
         }
     }
@@ -168,21 +168,21 @@ int worker_earn(int HEIGHT, string array_list[][8], string worker)
 }
 
 //cчитаем сколько нужно заплатить отдельному сотруднику или подрядной фирме
-int worker_payment(int HEIGHT, string array_list[][8], string worker)
+int worker_payment(int HEIGHT, string** array, string worker)
 {
     int payment = 0;
     for (int i = 0; i < HEIGHT; i++)
     {
-        if (array_list[i][EXECUTOR] == worker)
+        if (array[i][EXECUTOR] == worker)
         {
             if (worker == "сотрудник 1" || worker == "сотрудник 2")
             {
-                int x = (stoi(array_list[i][TOTAL]) + stoi(array_list[i][BONUS])) * 0.25;
+                int x = (stoi(array[i][TOTAL]) + stoi(array[i][BONUS])) * 0.25;
                 payment += x;
             }
             else if (worker == "подрядная фирма")
             {
-                int x = (stoi(array_list[i][TOTAL]) + stoi(array_list[i][BONUS])) * 0.5;
+                int x = (stoi(array[i][TOTAL]) + stoi(array[i][BONUS])) * 0.5;
                 payment += x;
             }
 
@@ -193,19 +193,19 @@ int worker_payment(int HEIGHT, string array_list[][8], string worker)
 }
 
 //cчитаем сколько нужно заплатить всем сотрудникам и подрядной фирме (включая бонусы)
-int total_payment(int HEIGHT, string array_list[][8])
+int total_payment(int HEIGHT, string** array)
 {
     int payment = 0;
     for (int i = 0; i < HEIGHT; i++)
     {
-        if (array_list[i][EXECUTOR] == "сотрудник 1" || array_list[i][EXECUTOR] == "сотрудник 2")
+        if (array[i][EXECUTOR] == "сотрудник 1" || array[i][EXECUTOR] == "сотрудник 2")
         {
-            int x = (stoi(array_list[i][TOTAL]) + stoi(array_list[i][BONUS])) * 0.25;
+            int x = (stoi(array[i][TOTAL]) + stoi(array[i][BONUS])) * 0.25;
             payment += x;
         }
-        else if (array_list[i][EXECUTOR] == "подрядная фирма")
+        else if (array[i][EXECUTOR] == "подрядная фирма")
         {
-            int x = (stoi(array_list[i][TOTAL]) + stoi(array_list[i][BONUS])) * 0.5;
+            int x = (stoi(array[i][TOTAL]) + stoi(array[i][BONUS])) * 0.5;
             payment += x;
         }
     }
@@ -214,9 +214,9 @@ int total_payment(int HEIGHT, string array_list[][8])
 }
 
 //суммарный доход фирмы после вычета зарплаты сотрудникам и подрядной фирме
-int total_profit(int HEIGHT, string array_list[][8], double bonus)
+int total_profit(int HEIGHT, string** array, double bonus)
 {
-    int profit = bonus_plus_income(HEIGHT, array_list, bonus) - total_payment(HEIGHT, array_list);
+    int profit = bonus_plus_income(HEIGHT, array, bonus) - total_payment(HEIGHT, array);
     //cout << profit;
     return profit;
 }
@@ -318,32 +318,32 @@ void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string **arr
 //_____________________________________________________________________________________________
 
 
-/*
+
 //меню выбора вариантов вывода информации
-int menu_program(int code, int HEIGHT, int WIDTH, string array_list[][8], double bonus, string worker)
+int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker)
 {
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(h, 2);
     switch (code)
     {
     case 49:
-        deadlines(HEIGHT, WIDTH, array_list, today_date);
+        deadlines(HEIGHT, WIDTH, array, today_date);
         cout << "\n";
         break;
     case 50:                                                //сумарные поступления
-        cout << "сумарные поступления = " << income(HEIGHT, array_list) << " грн";
+        cout << "сумарные поступления = " << income(HEIGHT, array) << " грн";
         cout << "\n";
         break;
     case 51:                                                //сумарные поступления вместе с бонусами
-        cout << "сумарные поступления вместе с бонусами = " << bonus_plus_income(HEIGHT, array_list, bonus) << " грн";
+        cout << "сумарные поступления вместе с бонусами = " << bonus_plus_income(HEIGHT, array, bonus) << " грн";
         cout << "\n";
         break;
     case 57:                                                //суммарный доход
-        cout << "суммарный доход = " << total_profit(HEIGHT, array_list, bonus) << " грн";
+        cout << "суммарный доход = " << total_profit(HEIGHT, array, bonus) << " грн";
         cout << "\n";
         break;
     case 52:                                                //сумма надбавок
-        cout << "сумма надбавок = " << bonus_plus(HEIGHT, array_list, bonus) << " грн";
+        cout << "сумма надбавок = " << bonus_plus(HEIGHT, array, bonus) << " грн";
         cout << "\n";
         break;
     case 53:                                                //заработаные деньги наемной фирмой или сотрудником
@@ -371,7 +371,7 @@ int menu_program(int code, int HEIGHT, int WIDTH, string array_list[][8], double
             {
                 break;
             }
-            cout << "деньги которые заработал(a)" << worker << " = " << worker_earn(HEIGHT, array_list, worker) << " грн\n";
+            cout << "деньги которые заработал(a)" << worker << " = " << worker_earn(HEIGHT, array, worker) << " грн\n";
             cout << "\n";
         }
         break;
@@ -400,12 +400,12 @@ int menu_program(int code, int HEIGHT, int WIDTH, string array_list[][8], double
             {
                 break;
             }
-            cout << "деньги которые нужно заплатить " << worker << " = " << worker_payment(HEIGHT, array_list, worker) << " грн\n";
+            cout << "деньги которые нужно заплатить " << worker << " = " << worker_payment(HEIGHT, array, worker) << " грн\n";
             cout << "\n";
         }
         break;
     case 55:                                                //сколько нужно заплатить всем сотрудникам и подрядной фирме (включая бонусы)
-        cout << "всего нужно заплатить за работу = " << total_payment(HEIGHT, array_list) << " грн";//!!!!!!!!!!!!!!
+        cout << "всего нужно заплатить за работу = " << total_payment(HEIGHT, array) << " грн";//!!!!!!!!!!!!!!
         cout << "\n";
         break;
     case 27:
@@ -417,7 +417,7 @@ int menu_program(int code, int HEIGHT, int WIDTH, string array_list[][8], double
         break;
     }
 }
-*/
+
 
 
 //сообщение с подсказкой для меню выбора (цветное)
@@ -448,13 +448,9 @@ int main()
     allocate_2D_array_memory(array, WIDTH, HEIGHT);
 
     loadArrayFromFile(filename, HEIGHT, WIDTH, array);
-
-    deadlines(HEIGHT, WIDTH, array);
-
-    /*
-    loadArrayFromFile(filename, HEIGHT, WIDTH, array_list);
+        
     
-    add_bonus(HEIGHT, array_list, bonus);
+    add_bonus(HEIGHT, array, bonus);
 
     print_message();
 
@@ -463,17 +459,17 @@ int main()
 
     while (true)
     {
-        add_bonus(HEIGHT, array_list, bonus);
+        add_bonus(HEIGHT, array, bonus);
         int code = _getch(); // функция приостанавливает работу программы, ждёт реакции пользователя
 
-        menu_program(code, HEIGHT, WIDTH, array_list, bonus, worker);
+        menu_program(code, HEIGHT, WIDTH, array, bonus, worker);
 
         if (code == 27)
         {
             break;
         }
     }
-    */
+    
   
 }
 
