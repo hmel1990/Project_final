@@ -1,11 +1,11 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
-#include <iostream>
+﻿#include <iostream>
 #include <string>
 #include <windows.h>
 #include <conio.h>
 #include <iomanip>
 
-
+#define _CRT_SECURE_NO_WARNINGS
+#pragma warning(disable:4996)
 
 using namespace std;
 
@@ -30,6 +30,7 @@ void set_array_widh(int& WIDTH);
 void set_array_height(int& HEIGHT);
 void allocate_2D_array_memory(string**& array, const int WIDTH, const int HEIGHT);
 void print_message();
+void delete_array(string** array, int HEIGHT, int WIDTH);
 
 
 
@@ -276,8 +277,6 @@ int total_profit(int HEIGHT, string** array, double bonus)
 
 
 //_____________________________________________________________________________________________
-//_____________________________________________________________________________________________
-
 // отдельная задача: проверка диапазона
 bool check_diapazone(const int value) 
 {
@@ -333,12 +332,13 @@ void allocate_2D_array_memory(string** &array, const int WIDTH, const int HEIGHT
     }
    
 }
-
 //_____________________________________________________________________________________________
+
 //заполнение массива из текстового файла с разделителями в виде табуляции
 void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string **array) {
     FILE* file = fopen(filename, "r");  // открытие файла для чтения
-    if (!file) {
+    if (!file) 
+    {
         perror("Ошибка: не удалось открыть файл");
         return;
     }
@@ -500,6 +500,16 @@ void print_message()
     cout << "Введите что хотим просмотреть: \n1-список дел на сегодня\n2-сумарные поступления, без бонусов\n3-сумарные поступления вместе с бонусами\n4-сумма надбавок за выполнение работы в день ее поступления\n5-заработаные деньги наемной фирмой или сотрудником\n6-зарплата отдельного сотрудника или подрядной фирмы\n7-сколько нужно заплатить всем сотрудникам и подрядной фирме (включая бонусы)\n8-вывод всего списка дел\n9-суммарный доход\nESC - выход из программы\n";
 }
 
+void delete_array(string** array,int HEIGHT, int WIDTH)
+{
+    for (int i = 0; i < HEIGHT; i++)
+    {
+        delete[] array[i];
+    }
+
+    delete[] array;
+}
+
 int main()
 {
     MoveWindow(GetConsoleWindow(), 250, 150, 1400, 800, true);// установка стартовой позиции окна консоли (250, 150, 1400, 800 - пиксели) отступ слева, отступ справа, ширина окна, высота окна
@@ -521,6 +531,6 @@ int main()
     
     add_bonus(HEIGHT, array, bonus);
     menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker);
-
+    delete_array(array, HEIGHT, WIDTH);
   }
 
