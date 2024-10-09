@@ -14,6 +14,7 @@ enum KeyCodes { NUMBER = 0, ADRESS = 1, CUSTOMER = 2, EXECUTOR = 3, TOTAL = 4, I
 int main();
 string today_date();
 void deadlines(string today, int HEIGHT, int WIDTH, string** array);
+void show_array(int HEIGHT, int WIDTH, string** array);
 int bonus_plus(int HEIGHT, string** array, double bonus);
 int income(int HEIGHT, string** array);
 int bonus_plus_income(int HEIGHT, string** array, double bonus);
@@ -25,6 +26,9 @@ int total_profit(int HEIGHT, string** array, double bonus);
 void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string** array);
 int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker);
 int menu_program_message(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker);
+void set_array_widh(int& WIDTH);
+void set_array_height(int& HEIGHT);
+void allocate_2D_array_memory(string**& array, const int WIDTH, const int HEIGHT);
 void print_message();
 
 
@@ -89,6 +93,54 @@ void deadlines(int HEIGHT, int WIDTH, string** array, string(*pf)()) // указ
             cout << "\n";
         }
 
+    }
+}
+
+//выводим весь список
+void show_array(int HEIGHT, int WIDTH, string** array)
+{
+    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(h, 15);
+    SetConsoleTextAttribute(h, 6);
+
+    cout << left;
+    for (int i = 0, j = 0; j < WIDTH; j++)
+    {
+        if (j == 1)
+        {
+            cout << setw(55) << array[0][j];
+        }
+        else if (j == 0)
+        {
+            cout << setw(5) << array[0][j];
+        }
+        else
+        {
+            cout << setw(20) << array[0][j];
+        }
+    }
+    cout << "\n";
+
+    for (int i = 1, j = 0; i < HEIGHT; i++)
+    {
+            cout << left;
+            for (j = 0; j < WIDTH; j++)
+            {
+                if (j == 1)
+                {
+                    cout << setw(55) << array[i][j];
+                }
+                else if (j == 0)
+                {
+                    cout << setw(5) << array[i][j];
+                }
+                else
+                {
+                    cout << setw(20) << array[i][j];
+
+                }
+            }
+            cout << "\n";
     }
 }
 
@@ -226,7 +278,6 @@ int total_profit(int HEIGHT, string** array, double bonus)
 //_____________________________________________________________________________________________
 //_____________________________________________________________________________________________
 
-
 // отдельная задача: проверка диапазона
 bool check_diapazone(const int value) 
 {
@@ -273,8 +324,8 @@ void set_array_height(int& HEIGHT)
     HEIGHT = number;
 }
 
-void allocate_2D_array_memory(string**& array, const int WIDTH, const int HEIGHT) {
-    // size = 100; // пометка параметра как const не позволит изменить значение параметра в теле функции
+void allocate_2D_array_memory(string** &array, const int WIDTH, const int HEIGHT) // пометка параметра как const не позволит изменить значение параметра в теле функции
+{
     array = new string* [HEIGHT]; // создание указателя на массив указателей
     for (int i = 0; i < HEIGHT; i++)
     {
@@ -282,7 +333,6 @@ void allocate_2D_array_memory(string**& array, const int WIDTH, const int HEIGHT
     }
    
 }
-
 
 //_____________________________________________________________________________________________
 //_____________________________________________________________________________________________
@@ -406,8 +456,13 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
         }
         break;
     case 55:                                                //сколько нужно заплатить всем сотрудникам и подрядной фирме (включая бонусы)
-        cout << "всего нужно заплатить за работу = " << total_payment(HEIGHT, array) << " грн";//!!!!!!!!!!!!!!
+        cout << "всего нужно заплатить за работу = " << total_payment(HEIGHT, array) << " грн";
         cout << "\n";
+        break;
+    case 56:                                                //просто вывод всего списка
+        cout << "весь список дел ";
+        cout << "\n";
+        show_array(HEIGHT, WIDTH, array);
         break;
     case 27:
         cout << "Программа завершена!\n";
@@ -443,7 +498,7 @@ void print_message()
 {
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(h, 14);
-    cout << "Введите что хотим просмотреть: \n1-список дел на сегодня\n2-сумарные поступления, без бонусов\n3-сумарные поступления вместе с бонусами\n4-сумма надбавок за выполнение работы в день ее поступления\n5-заработаные деньги наемной фирмой или сотрудником\n6-зарплата отдельного сотрудника или подрядной фирмы\n7-сколько нужно заплатить всем сотрудникам и подрядной фирме (включая бонусы)\n9-суммарный доход\nESC - выход из программы\n";
+    cout << "Введите что хотим просмотреть: \n1-список дел на сегодня\n2-сумарные поступления, без бонусов\n3-сумарные поступления вместе с бонусами\n4-сумма надбавок за выполнение работы в день ее поступления\n5-заработаные деньги наемной фирмой или сотрудником\n6-зарплата отдельного сотрудника или подрядной фирмы\n7-сколько нужно заплатить всем сотрудникам и подрядной фирме (включая бонусы)\n8-вывод всего списка дел\n9-суммарный доход\nESC - выход из программы\n";
 }
 
 int main()
