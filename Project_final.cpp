@@ -242,8 +242,6 @@ int total_profit(int HEIGHT, string** array, double bonus)
     return profit;
 }
 
-
-//_____________________________________________________________________________________________
 // отдельная задача: проверка диапазона
 bool check_diapazone(const int value) 
 {
@@ -306,7 +304,8 @@ void allocate_2D_array_memory(string** &array, const int WIDTH, const int HEIGHT
 //_____________________________________________________________________________________________
 
 //заполнение массива из текстового файла с разделителями в виде табуляции
-void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string **array) {
+void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string **array) 
+{
     FILE* file = fopen(filename, "r");  // открытие файла для чтения
     if (!file) 
     {
@@ -317,7 +316,8 @@ void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string **arr
     char buffer[256];  // буфер для считывания строк
     int row = 0;
 
-    while (fgets(buffer, sizeof(buffer), file) && row < HEIGHT) {
+    while (fgets(buffer, sizeof(buffer), file) && row < HEIGHT) 
+    {
         // Разбиение строки на токены
         char* token = strtok(buffer, "\t\n");  // разделение только по табуляциям
         int col = 0;
@@ -473,14 +473,14 @@ void start_message()
 {
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(h, 14);
-    cout << "Добро пожаловать в программу учета експертных оценок\n";
-    Sleep(1500);
-    for (int i = 0; i < 50; i++)
-    {
-        Sleep(100);
-        cout << "/";
+        string x = "Добро пожаловать в программу учета експертных оценок";
+    int length = x.length();
+    for (int i = 0; i < length; i++)
+    { 
+        cout << x[i];
+        Sleep(30);
     }
-    cout << "\n\n";
+    cout << "\n\n";    
 }
 
 //очистка выделенной памяти от данных из динамических массивов
