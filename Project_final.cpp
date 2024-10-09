@@ -290,7 +290,7 @@ void set_array_widh(int& WIDTH)
 {
     int number = -1;
     do {
-        cout << "Введите ширину массива: ";
+        cout << "Введите ширину массива (8): ";
         string attempt;
         cin >> attempt;
         try 
@@ -309,7 +309,7 @@ void set_array_height(int& HEIGHT)
 {
     int number = -1;
     do {
-        cout << "Введите длину массива: ";
+        cout << "Введите высоту массива (17): ";
         string attempt;
         cin >> attempt;
         try
@@ -333,10 +333,6 @@ void allocate_2D_array_memory(string** &array, const int WIDTH, const int HEIGHT
     }
    
 }
-
-//_____________________________________________________________________________________________
-//_____________________________________________________________________________________________
-
 
 //_____________________________________________________________________________________________
 //заполнение массива из текстового файла с разделителями в виде табуляции
@@ -460,7 +456,10 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
         cout << "\n";
         break;
     case 56:                                                //просто вывод всего списка
-        cout << "весь список дел ";
+        cout << "\n";
+        cout << "\n";
+        cout << "Весь список дел ";
+        cout << "\n";
         cout << "\n";
         show_array(HEIGHT, WIDTH, array);
         break;
