@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <conio.h>
 #include <iomanip>
+#include <cstdlib>
 
 enum KeyCodes { NUMBER = 0, ADRESS = 1, CUSTOMER = 2, EXECUTOR = 3, TOTAL = 4, INCOME = 5, DELIVERY = 6, BONUS = 7 };
 
@@ -29,4 +30,6 @@ void set_array_widh(int& WIDTH);
 void set_array_height(int& HEIGHT);
 void allocate_2D_array_memory(string**& array, const int WIDTH, const int HEIGHT);
 void print_message();
+void start_message();
 void delete_array(string** array, int HEIGHT, int WIDTH);
+

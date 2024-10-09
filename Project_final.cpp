@@ -254,6 +254,8 @@ bool check_diapazone(const int value)
 
 void set_array_widh(int& WIDTH)
 {
+    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(h, 15);
     int number = -1;
     do {
         cout << "Введите ширину массива (8): ";
@@ -273,6 +275,8 @@ void set_array_widh(int& WIDTH)
 
 void set_array_height(int& HEIGHT)
 {
+    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(h, 15);
     int number = -1;
     do {
         cout << "Введите высоту массива (17): ";
@@ -330,8 +334,6 @@ void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string **arr
     fclose(file);
 }
 //_____________________________________________________________________________________________
-
-
 
 //меню выбора вариантов вывода информации
 int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker)
@@ -467,6 +469,20 @@ void print_message()
     cout << "Введите что хотим просмотреть: \n1-список дел на сегодня\n2-сумарные поступления, без бонусов\n3-сумарные поступления вместе с бонусами\n4-сумма надбавок за выполнение работы в день ее поступления\n5-заработаные деньги наемной фирмой или сотрудником\n6-зарплата отдельного сотрудника или подрядной фирмы\n7-сколько нужно заплатить всем сотрудникам и подрядной фирме (включая бонусы)\n8-вывод всего списка дел\n9-суммарный доход\nESC - выход из программы\n";
 }
 
+void start_message()
+{
+    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(h, 14);
+    cout << "Добро пожаловать в программу учета експертных оценок\n";
+    Sleep(1500);
+    for (int i = 0; i < 50; i++)
+    {
+        Sleep(100);
+        cout << "/";
+    }
+    cout << "\n\n";
+}
+
 //очистка выделенной памяти от данных из динамических массивов
 void delete_array(string** array,int HEIGHT, int WIDTH)
 {
@@ -481,8 +497,13 @@ void delete_array(string** array,int HEIGHT, int WIDTH)
 int main()
 {
     MoveWindow(GetConsoleWindow(), 250, 150, 1400, 800, true);// установка стартовой позиции окна консоли (250, 150, 1400, 800 - пиксели) отступ слева, отступ справа, ширина окна, высота окна
+    
     setlocale(0, "");
 
+    system("title EXPERT ASSESSMENT"); // Установка заголовка окна
+
+    start_message();
+        
     double bonus = 0.2;
     string worker;
     int WIDTH;
