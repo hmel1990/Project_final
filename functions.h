@@ -1,9 +1,3 @@
-#include <iostream>
-#include <string>
-#include <windows.h>
-#include <conio.h>
-#include <iomanip>
-#include <cstdlib>
 int main();
 string today_date();
 void deadlines(string today, int HEIGHT, int WIDTH, string** array);
