@@ -367,7 +367,7 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
         cout << "\n";
         break;
     case 50:                                                //сумарные поступления
-        cout << "сумарные поступления = " << income(HEIGHT, array) << " грн";
+        cout << "\nсумарные поступления = " << income(HEIGHT, array) << " грн";
         cout << "\n";
         break;
     case 51:                                                //сумарные поступления вместе с бонусами
@@ -375,15 +375,15 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
         cout << "\n";
         break;
     case 57:                                                //суммарный доход
-        cout << "суммарный доход = " << total_profit(HEIGHT, array, bonus) << " грн";
+        cout << "\nсуммарный доход = " << total_profit(HEIGHT, array, bonus) << " грн";
         cout << "\n";
         break;
     case 52:                                                //сумма надбавок
-        cout << "сумма надбавок = " << bonus_plus(HEIGHT, array, bonus) << " грн";
+        cout << "\nсумма надбавок = " << bonus_plus(HEIGHT, array, bonus) << " грн";
         cout << "\n";
         break;
     case 53:                                                //заработаные деньги наемной фирмой или сотрудником
-        cout << "Подсчет поступлений отдельно по каждому сотруднику или подрядной фирме на выбор\nУкажите кого хотим посмотреть?\n1-сотрудник 1\n2-сотрудник 2\n3-подрядная фирма\nESC - выход из программы\n\n";
+        cout << "\nПодсчет поступлений отдельно по каждому сотруднику или подрядной фирме на выбор\nУкажите кого хотим посмотреть?\n1-сотрудник 1\n2-сотрудник 2\n3-подрядная фирма\nESC - выход из программы\n\n";
         while (true)
         {
             int code = _getch();
@@ -407,7 +407,7 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
             {
                 break;
             }
-            cout << "деньги которые заработал(a)" << worker << " = " << worker_earn(HEIGHT, array, worker) << " грн\n";
+            cout << "\nденьги которые заработал(a)" << worker << " = " << worker_earn(HEIGHT, array, worker) << " грн\n";
             cout << "\n";
         }
         break;
