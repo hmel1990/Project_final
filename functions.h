@@ -371,7 +371,7 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
         cout << "\n";
         break;
     case 51:                                                //сумарные поступления вместе с бонусами
-        cout << "сумарные поступления вместе с бонусами = " << bonus_plus_income(HEIGHT, array, bonus) << " грн";
+        cout << "\nсумарные поступления вместе с бонусами = " << bonus_plus_income(HEIGHT, array, bonus) << " грн";
         cout << "\n";
         break;
     case 57:                                                //суммарный доход
@@ -476,7 +476,6 @@ int menu_program_message(int code, int HEIGHT, int WIDTH, string** array, double
     while (true)
     {
         print_message();
-        //HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleTextAttribute(h, 2);
         while (true)
         {
