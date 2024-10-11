@@ -7,7 +7,7 @@ int main()
     MoveWindow(GetConsoleWindow(), 250, 150, 1400, 800, true);// установка стартовой позиции окна консоли (250, 150, 1400, 800 - пиксели) отступ слева, отступ справа, ширина окна, высота окна
     setlocale(0, ""); //
     SetConsoleOutputCP(CP_UTF8); // для вывода украинских букв "і"
-    system("title EXPERT ASSESSMENT"); // Установка заголовка окна
+    system("title EXPERT ASSESSMENT - Денежная оценка"); // Установка заголовка окна
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 
     start_message();
