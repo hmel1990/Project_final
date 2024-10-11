@@ -10,7 +10,6 @@ int main()
     system("title EXPERT ASSESSMENT - Денежная оценка"); // Установка заголовка окна
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    start_message();
         
     double bonus = 0.2;
     string worker;
@@ -19,6 +18,9 @@ int main()
     string** array;
     int code = 1;
     const char* filename = "my_list.txt";
+
+    //Старовое сообщение
+    start_message();
 
     //Работа с созданием массива
     set_array_widh(WIDTH);                                              // установка ширины массива
@@ -35,4 +37,3 @@ int main()
     //Завершение работы 
     delete_array(array, HEIGHT, WIDTH);                                 // очистка оперативной памяти от созданного массива
   }
-
