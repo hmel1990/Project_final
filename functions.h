@@ -18,7 +18,7 @@ int total_payment(int HEIGHT, string** array);
 int total_profit(int HEIGHT, string** array, double bonus);
 void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string** array);
 int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker);
-int menu_program_message(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker);
+int menu_program_message(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker, HANDLE h);
 void set_array_widh(int& WIDTH);
 void set_array_height(int& HEIGHT);
 void allocate_2D_array_memory(string**& array, const int WIDTH, const int HEIGHT);
@@ -91,10 +91,9 @@ void deadlines(int HEIGHT, int WIDTH, string** array, string(*pf)(), HANDLE h) /
 }
 
 //выводим весь список
-void show_array(int HEIGHT, int WIDTH, string** array)
+void show_array(int HEIGHT, int WIDTH, string** array, HANDLE h)
 {
-    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(h, 15);
+    //SetConsoleTextAttribute(h, 15);
     SetConsoleTextAttribute(h, 6);
 
     cout << left;
@@ -208,7 +207,6 @@ int worker_earn(int HEIGHT, string** array, string worker)
             payment += x;
         }
     }
-    //payment *= 0.25;
     //cout << payment;
     return payment;
 }
@@ -330,6 +328,7 @@ void allocate_2D_array_memory(string**& array, const int WIDTH, const int HEIGHT
 
 }
 
+//_____________________________________________________________________________________________
 //заполнение массива из текстового файла с разделителями в виде табуляции
 void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string** array)
 {
@@ -363,9 +362,8 @@ void loadArrayFromFile(const char* filename, int HEIGHT, int WIDTH, string** arr
 //_____________________________________________________________________________________________
 
 //меню выбора вариантов вывода информации
-int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker)
+int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker, HANDLE h)
 {
-    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(h, 2);
     switch (code)
     {
@@ -390,7 +388,7 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
         cout << "\n";
         break;
     case 53:                                                //заработаные деньги наемной фирмой или сотрудником
-        cout << "Укажите кого хотим посмотреть?\n1-сотрудник 1\n2-сотрудник 2\n3-подрядная фирма\nESC - выход из программы\n";
+        cout << "Укажите кого хотим посмотреть?\n1-сотрудник 1\n2-сотрудник 2\n3-подрядная фирма\nESC - выход из программы\n\n";
         while (true)
         {
             int code = _getch();
@@ -407,7 +405,7 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
                 break;
             case 27:
                 cout << "Выход\n";
-                menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker);                          //используем рекурсию!
+                menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker,h);                          //используем рекурсию!
                 break;
             }
             if (code == 27)
@@ -419,7 +417,7 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
         }
         break;
     case 54:                                                //зарплата отдельного сотрудника или подрядной фирмы
-        cout << "Укажите кому платим?\n1-сотрудник 1\n2-сотрудник 2\n3-подрядная фирма\nESC - выход из программы\n";
+        cout << "Укажите кому платим?\n1-сотрудник 1\n2-сотрудник 2\n3-подрядная фирма\nESC - выход из программы\n\n";
         while (true)
         {
             int code = _getch();
@@ -436,7 +434,7 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
                 break;
             case 27:
                 cout << "Выход\n";
-                menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker);                         //используем рекурсию!
+                menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker, h);                         //используем рекурсию!
                 break;
             }
             if (code == 27)
@@ -457,7 +455,7 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
         cout << "Весь список дел ";
         cout << "\n";
         cout << "\n";
-        show_array(HEIGHT, WIDTH, array);
+        show_array(HEIGHT, WIDTH, array, h);
         break;
     case 27:
         cout << "Программа завершена!\n";
@@ -469,16 +467,16 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
     }
 }
 
-int menu_program_message(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker) {
+int menu_program_message(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker, HANDLE h) {
     while (true)
     {
         print_message();
-        HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+        //HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleTextAttribute(h, 2);
         while (true)
         {
             int code = _getch(); // функция приостанавливает работу программы, ждёт реакции пользователя
-            menu_program(code, HEIGHT, WIDTH, array, bonus, worker);
+            menu_program(code, HEIGHT, WIDTH, array, bonus, worker,h);
             if (code == 27)
             {
                 return false;

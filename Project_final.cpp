@@ -27,7 +27,7 @@ int main()
     loadArrayFromFile(filename, HEIGHT, WIDTH, array);     
     
     add_bonus(HEIGHT, array, bonus);
-    menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker);
+    menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker,h);
     delete_array(array, HEIGHT, WIDTH);
   }
 
