@@ -9,7 +9,7 @@
 
 enum KeyCodes { NUMBER = 0, ADRESS = 1, CUSTOMER = 2, EXECUTOR = 3, TOTAL = 4, INCOME = 5, DELIVERY = 6, BONUS = 7 };
 
-using namespace std;
+using namespace std; //директива
 
 
 

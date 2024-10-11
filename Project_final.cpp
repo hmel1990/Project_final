@@ -5,7 +5,7 @@
 int main()
 {
     MoveWindow(GetConsoleWindow(), 250, 150, 1400, 800, true);// установка стартовой позиции окна консоли (250, 150, 1400, 800 - пиксели) отступ слева, отступ справа, ширина окна, высота окна
-    setlocale(0, "");
+    setlocale(0, ""); //
     SetConsoleOutputCP(CP_UTF8); // для вывода украинских букв "і"
     system("title EXPERT ASSESSMENT"); // Установка заголовка окна
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -20,14 +20,19 @@ int main()
     int code = 1;
     const char* filename = "my_list.txt";
 
-    set_array_widh(WIDTH);                              // установка ширины массива
-    set_array_height(HEIGHT);                           // установка высоты массива
-    allocate_2D_array_memory(array, WIDTH, HEIGHT);
+    //Работа с созданием массива
+    set_array_widh(WIDTH);                                              // установка ширины массива
+    set_array_height(HEIGHT);                                           // установка высоты массива
+    allocate_2D_array_memory(array, WIDTH, HEIGHT);                     // выделение памяти в куче (heap)
 
-    loadArrayFromFile(filename, HEIGHT, WIDTH, array);     
+    //Заполнение массива
+    loadArrayFromFile(filename, HEIGHT, WIDTH, array);                  // загрузка данных из файла .txt     
+    add_bonus(HEIGHT, array, bonus);                                    // заполнение при необходимых условиях бонусами
     
-    add_bonus(HEIGHT, array, bonus);
-    menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker,h);
-    delete_array(array, HEIGHT, WIDTH);
+    //Работа с программой
+    menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker,h);  // меню программы
+    
+    //Завершение работы 
+    delete_array(array, HEIGHT, WIDTH);                                 // очистка оперативной памяти от созданного массива
   }
 
