@@ -31,8 +31,10 @@ int main()
     loadArrayFromFile(filename, HEIGHT, WIDTH, array);                  // загрузка данных из файла .txt     
     add_bonus(HEIGHT, array, bonus);                                    // заполнение при необходимых условиях бонусами
     
+    
     //Работа с программой
     menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker,h);  // меню программы
+    
     
     //Завершение работы 
     delete_array(array, HEIGHT, WIDTH);                                 // очистка оперативной памяти от созданного массива

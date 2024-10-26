@@ -400,7 +400,8 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
                 break;
             case 27:
                 cout << "Выход\n";
-                menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker,h);                          //используем рекурсию!
+                print_message();
+                SetConsoleTextAttribute(h, 2);
                 break;
             }
             if (code == 27)
@@ -429,7 +430,8 @@ int menu_program(int code, int HEIGHT, int WIDTH, string** array, double bonus, 
                 break;
             case 27:
                 cout << "Выход\n";
-                menu_program_message(code, HEIGHT, WIDTH, array, bonus, worker, h);                         //используем рекурсию!
+                print_message();
+                SetConsoleTextAttribute(h, 2);
                 break;
             }
             if (code == 27)
@@ -473,20 +475,16 @@ void print_message()
 
 //при выходе из предыдущего меню, повторный вывод подсказки с выбором действий
 int menu_program_message(int code, int HEIGHT, int WIDTH, string** array, double bonus, string worker, HANDLE h) {
+    print_message();
     while (true)
     {
-        print_message();
-        SetConsoleTextAttribute(h, 2);
-        while (true)
-        {
-            int code = _getch(); // функция приостанавливает работу программы, ждёт реакции пользователя
-            menu_program(code, HEIGHT, WIDTH, array, bonus, worker,h);
+        int code = _getch(); // функция приостанавливает работу программы, ждёт реакции пользователя
+
+        menu_program(code, HEIGHT, WIDTH, array, bonus, worker,h);
             if (code == 27)
             {
                 return false;
-                break;
             }
-        }
     }
 }
 
